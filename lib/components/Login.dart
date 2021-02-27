@@ -3,16 +3,54 @@ import 'package:flutter_login/flutter_login.dart';
 import '../main.dart';
 
 
-class TelaLogin extends StatefulWidget {
-  @override
-  _TelaLoginState createState() => _TelaLoginState();
-}
+const users = const
+{
+  'adminscolioapp@gmail.com' : '12345'
+};
 
-class _TelaLoginState extends State<TelaLogin> {
+class TelaLogin extends StatelessWidget 
+{
+  Duration get loginTime => Duration(milliseconds: 2240);
+
+  Future<String> _authUser(LoginData data)
+  {
+    print('Name: ${data.name}, Password: ${data.password}');
+    return Future.delayed(loginTime).then((_) {
+      if (!users.containsKey(data.name)) {
+        return 'Username not exists';
+      }
+      if (users[data.name] != data.password) {
+        return 'Password does not match';
+      }
+      return null;
+    });
+  }
+
+  Future<String> _recoverPassword(String name) 
+  {
+    print('Name: $name');
+    return Future.delayed(loginTime).then((_) {
+      if (!users.containsKey(name)) {
+        return 'Username not exists';
+      }
+      return null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
+    return FlutterLogin(
+      title: 'ScolioApp',
+      logo: null,
+      onLogin: _authUser,
+      onSignup: _authUser,
+      onSubmitAnimationCompleted: ()
+      {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => ListaPacientes(),
+        ));
+      },
+      onRecoverPassword: _recoverPassword,
     );
   }
 }

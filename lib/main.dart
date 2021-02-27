@@ -12,6 +12,7 @@ import 'components/PacienteList.dart';
 import 'components/ConsultaForm.dart';
 import 'components/ConsultaList.dart';
 import 'components/ResultadoConsulta.dart';
+import 'components/Login.dart';
 
 main()=>runApp(ScolioApp());
 
@@ -19,7 +20,7 @@ class ScolioApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyHomePage(),
+      home: TelaLogin(),
       theme: new ThemeData(
         primarySwatch: Colors.blue,
         dividerColor: Colors.grey,
