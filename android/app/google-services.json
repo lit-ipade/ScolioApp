@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "252854745145",
+    "project_id": "scolioapp",
+    "storage_bucket": "scolioapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252854745145:android:3c5af10dcbc831ae5d75e8",
+        "android_client_info": {
+          "package_name": "br.edu.unichristus.scolioapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "252854745145-cd97ggj53ul4g4ahchg0u2g4g4r5b6us.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoIBfH8QrXo_-8sOr0hRt2m-3GI6CD94o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "252854745145-cd97ggj53ul4g4ahchg0u2g4g4r5b6us.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

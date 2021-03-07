@@ -1,4 +1,4 @@
-package com.example.scolioapp
+package br.edu.unichristus.scolioapp
 
 import io.flutter.embedding.android.FlutterActivity
 
