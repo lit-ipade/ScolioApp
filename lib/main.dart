@@ -1,11 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:scolioapp/Autenticador_service.dart';
 import 'package:scolioapp/models/avaliacao.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'dart:ui';
 import 'dart:math';
 
-import 'components/BotaoCaminho.dart';
+import 'Autenticador_service.dart';
 import 'models/pacientes.dart';
 import 'components/PacienteForm.dart';
 import 'components/PacienteList.dart';
@@ -14,71 +17,79 @@ import 'components/ConsultaList.dart';
 import 'components/ResultadoConsulta.dart';
 import 'components/Login.dart';
 
-main()=>runApp(ScolioApp());
-
+Future<void> main() async
+{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(ScolioApp());
+}
 class ScolioApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: TelaLogin(),
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
-        dividerColor: Colors.grey,
-        appBarTheme: AppBarTheme
+    return MultiProvider
+    (providers: 
+    [
+      Provider<AuthenticationService>
+      (
+        create: (_) => AuthenticationService(FirebaseAuth.instance),
+      ),
+      StreamProvider
+      (
+        create: (context)=>context.read<AuthenticationService>().authStateChanges,
+      )
+    ],
+      child: MaterialApp
+      (
+        home: AuthenticateWrapper(),
+        theme: new ThemeData
         (
-            color: Colors.white,
-            iconTheme: IconThemeData
+          primarySwatch: Colors.blue,
+          dividerColor: Colors.grey,
+          appBarTheme: AppBarTheme
+          (
+              color: Colors.white,
+              iconTheme: IconThemeData
+              (
+                color: Colors.blue[900]
+              )
+            ),
+          primaryTextTheme: TextTheme
+          (
+            headline6: TextStyle
             (
-              color: Colors.blue[900]
+              color: Colors.black
             )
           ),
-        primaryTextTheme: TextTheme
-        (
-          headline6: TextStyle
-          (
-            color: Colors.black
-          )
-        ),
-        disabledColor: Colors.grey[600],
-        primaryColor: Colors.blue[900],
-        scaffoldBackgroundColor: Colors.grey[200],
-        accentColor: Colors.blue[900],
-        backgroundColor: Colors.grey[200]
-    ),
+          disabledColor: Colors.grey[600],
+          primaryColor: Colors.blue[900],
+          scaffoldBackgroundColor: Colors.grey[200],
+          accentColor: Colors.blue[900],
+          backgroundColor: Colors.grey[200]
+      ),
+      ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
 
-class _MyHomePageState extends State<MyHomePage> {
+class AuthenticateWrapper extends StatelessWidget{
+  const AuthenticateWrapper({
+    Key key
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold
-    (
-      appBar: AppBar
-      (
-        title: Text('ScolioApp'),
-      ),
-      body: Column
-        (
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>
-            [
-              Container
-              (
-                alignment: Alignment.center,
-                child: BotaoCaminho('Pacientes Cadastrados', Theme.of(context).primaryColor, ListaPacientes()),
-              ),
-            ]
-        ),
-    );
+  Widget build(BuildContext context)
+  {
+    void autenticarLogin(LoginData data)
+    {
+      context.read<AuthenticationService>().signIn(data.name,data.password);
+    }
+    final firebaseUser = context.watch<User>();
+    if(firebaseUser != null)
+    {
+      return ListaPacientes();
+    }
+    return TelaLogin(autenticarLogin);
   }
 }
 
@@ -136,6 +147,18 @@ class _ListaPacientesState extends State<ListaPacientes> {
       appBar: AppBar
       (
         title: Text('Lista de Pacientes'),
+        actions: <Widget>
+        [
+          IconButton
+          (
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: ()
+            {
+              context.read<AuthenticationService>().signOut();
+            },
+          )
+        ],
       ),
       body: SingleChildScrollView
       (
