@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/avaliacao.dart';
 import 'package:intl/intl.dart';
 
-class ConsultaList extends StatelessWidget 
+class ConsultaList extends StatefulWidget 
 {
 
   List<Avaliacao> consultas;
@@ -12,11 +12,18 @@ class ConsultaList extends StatelessWidget
   
   ConsultaList(this.consultas, this.onDelete, this.mostrarConsulta);
 
+  @override
+  _ConsultaListState createState() => _ConsultaListState();
+}
+
+class _ConsultaListState extends State<ConsultaList> {
+
+
   _criarLista()
   {
-    if(consultas == null)
+    if(widget.consultas == null)
     {
-      consultas = [];
+      widget.consultas = [];
     }
     else
     {
@@ -31,7 +38,7 @@ class ConsultaList extends StatelessWidget
     return Container(
       height: MediaQuery.of(context).size.height * 0.8,
       child: 
-      consultas.isEmpty ? Column
+      widget.consultas.isEmpty ? Column
       (
         children: <Widget>
         [
@@ -52,14 +59,14 @@ class ConsultaList extends StatelessWidget
         ],
       ) : ListView.builder
       (
-        itemCount: consultas.length,
+        itemCount: widget.consultas.length,
         itemBuilder: (ctx, index)
         {
-         final tr = consultas[index];
+         final tr = widget.consultas[index];
           return GestureDetector(
             onTap: ()
             {
-              mostrarConsulta(tr);
+              widget.mostrarConsulta(tr);
             },
             child: Card
             (
@@ -77,7 +84,7 @@ class ConsultaList extends StatelessWidget
                       child:
                       Text
                         (
-                         DateFormat('d MMM y').format(tr.data),
+                         tr.data,
                         ),
                     ),
                   ),
@@ -89,13 +96,13 @@ class ConsultaList extends StatelessWidget
                 ),
                 subtitle: Text
                 (
-                  DateFormat('d MMM y').format(tr.data),
+                  tr.data,
                 ),
                 trailing: IconButton
                 (
                   icon: Icon(Icons.delete),
                   color: Theme.of(context).errorColor,
-                  onPressed: null,// () => onDelete(tr.id),
+                  onPressed: () => widget.onDelete(tr.id),
                 ),
               ),
             ),

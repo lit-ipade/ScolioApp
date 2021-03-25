@@ -1,21 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:provider/provider.dart';
-import 'package:scolioapp/Autenticador_service.dart';
+import 'package:scolioapp/components/Login.dart';
+import 'package:scolioapp/models/Autenticador_service.dart';
 import 'package:scolioapp/models/avaliacao.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:intl/intl.dart';
 import 'dart:ui';
 import 'dart:math';
 
-import 'Autenticador_service.dart';
+import 'models/Autenticador_service.dart';
 import 'models/pacientes.dart';
 import 'components/PacienteForm.dart';
 import 'components/PacienteList.dart';
 import 'components/ConsultaForm.dart';
 import 'components/ConsultaList.dart';
 import 'components/ResultadoConsulta.dart';
-import 'components/Login.dart';
+import './provider/PacienteProvider.dart';
 
 Future<void> main() async
 {
@@ -24,8 +27,11 @@ Future<void> main() async
   runApp(ScolioApp());
 }
 class ScolioApp extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
+    FirebaseFirestore firestore = FirebaseFirestore.instance; 
+    
     return MultiProvider
     (providers: 
     [
@@ -36,7 +42,11 @@ class ScolioApp extends StatelessWidget {
       StreamProvider
       (
         create: (context)=>context.read<AuthenticationService>().authStateChanges,
-      )
+      ),
+      ChangeNotifierProvider
+      (
+        create: (context) => new PacienteProvider(),
+      ),
     ],
       child: MaterialApp
       (
@@ -80,32 +90,35 @@ class AuthenticateWrapper extends StatelessWidget{
   @override
   Widget build(BuildContext context)
   {
-    void autenticarLogin(LoginData data)
-    {
-      context.read<AuthenticationService>().signIn(data.name,data.password);
-    }
-    final firebaseUser = context.watch<User>();
+    final firebaseUser = context.watch<User>(); 
     if(firebaseUser != null)
     {
-      return ListaPacientes();
+      return ListaPacientes(firebaseUser);
     }
-    return TelaLogin(autenticarLogin);
+    return TelaLogin(); 
   }
+  
 }
 
 class ListaPacientes extends StatefulWidget {
-  
+  final User user;
+
+  ListaPacientes(this.user);
   @override
-  _ListaPacientesState createState() => _ListaPacientesState();
+  _ListaPacientesState createState() => _ListaPacientesState(user);
 }
 
 class _ListaPacientesState extends State<ListaPacientes> {
 
-    final List<Paciente> _pacientes =
-    [
-      
-    ];
-  _addPaciente(String nome, String sexo, DateTime nascimento)
+  final User user;
+
+  _ListaPacientesState(this.user);
+  @override
+  Widget build(BuildContext context) {
+    final pacientesProvider = Provider.of<PacienteProvider>(context);
+    final List<Paciente> _pacientes = pacientesProvider.pacientes;
+        
+  _addPaciente(String nome, String sexo, String nascimento)
   {
     final novoCadastro = Paciente
     (
@@ -116,7 +129,7 @@ class _ListaPacientesState extends State<ListaPacientes> {
       avaliacoesHistorico: [],
     );
     setState(() {
-      _pacientes.add(novoCadastro);
+      pacientesProvider.addPaciente(novoCadastro);
     });
     Navigator.of(context).pop();
   }
@@ -140,8 +153,8 @@ class _ListaPacientesState extends State<ListaPacientes> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
+
+  //--------------------------------------------------------------------------------------------
     return Scaffold
     (
       appBar: AppBar
@@ -185,18 +198,18 @@ class _ListaPacientesState extends State<ListaPacientes> {
 }
 
 class ListaConsulta extends StatefulWidget {
-  final List<Avaliacao> consultasPaciente;
+  final Paciente paciente;
   
-  ListaConsulta(this.consultasPaciente);
+  ListaConsulta(this.paciente);
 
   @override
-  _ListaConsultaState createState() => _ListaConsultaState(consultasPaciente);
+  _ListaConsultaState createState() => _ListaConsultaState(paciente);
 }
 
 class _ListaConsultaState extends State<ListaConsulta> {
-  final List<Avaliacao> consultasPaciente;
+  final Paciente paciente;
 
-  _ListaConsultaState(this.consultasPaciente);
+  _ListaConsultaState(this.paciente);
 
 
   _addConsulta(bool desnivelOmbro, bool desnivelBacia, bool gibosidade, bool radiografia, int angulo, int maturidade)
@@ -204,7 +217,7 @@ class _ListaConsultaState extends State<ListaConsulta> {
     final novoCadastro = Avaliacao
     (
       id: Random().nextDouble().toString(),
-      data: DateTime.now(),
+      data: DateFormat('dd MM YYYY').format(DateTime.now()),
       desnivelOmbro: desnivelOmbro,
       desnivelBacia: desnivelBacia,
       gibosidade: gibosidade,
@@ -213,7 +226,7 @@ class _ListaConsultaState extends State<ListaConsulta> {
       maturidadeEsqueletica: maturidade
     );
     setState(() {
-      consultasPaciente.add(novoCadastro);
+      paciente.avaliacoesHistorico.add(novoCadastro);
     });
     Navigator.of(context).pop();
   }
@@ -231,22 +244,11 @@ class _ListaConsultaState extends State<ListaConsulta> {
       ),
     );
   }
-  _openCadastroFormModal(BuildContext context)
-  {
-    showModalBottomSheet
-    (
-      context: context,
-      builder: (_)
-      {
-       return ConsultaForm(_addConsulta);
-      }
-    );
-  }
 
   _deleteConsulta(String id)
   {
     setState(() {
-      consultasPaciente.removeWhere((tr) => tr.id == id);
+      paciente.avaliacoesHistorico.removeWhere((tr) => tr.id == id);
     });
   }
 
@@ -279,7 +281,7 @@ class _ListaConsultaState extends State<ListaConsulta> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children:<Widget>
           [
-            ConsultaList(consultasPaciente, _deleteConsulta, _exibirConsulta),
+            ConsultaList(paciente.avaliacoesHistorico, _deleteConsulta, _exibirConsulta),
           ],
         ),
       ),

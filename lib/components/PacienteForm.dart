@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 class PacienteForm extends StatefulWidget {
 
-  final void Function(String, String, DateTime) onSubmit;
+  final void Function(String, String, String) onSubmit;
 
   PacienteForm(this.onSubmit);
 
@@ -21,6 +21,8 @@ class _PacienteFormState extends State<PacienteForm> {
   SexoDefinido _sexoController = SexoDefinido.m;
 
   DateTime _selectNascimento = DateTime.now();
+
+
 
   
 void _exibirDialogo() 
@@ -60,7 +62,8 @@ void _exibirDialogo()
       }
       return;
     }
-    widget.onSubmit(nome,sexo,_selectNascimento);
+    String dataSelecionada = DateFormat('dd/MM/yyyy').format(_selectNascimento);
+    widget.onSubmit(nome,sexo,dataSelecionada);
   }
 
   _showDatePicker()
@@ -166,7 +169,7 @@ void _exibirDialogo()
                   child: Text
                     (
                       _selectNascimento == null ? 'Nenhuma data selecionada !' :
-                      'Data Selecionada: ${DateFormat('dd/MM/y').format(_selectNascimento)}',
+                      'Data Selecionada: ${DateFormat('dd/MM/yyyy').format(_selectNascimento)}',
                     ),
                   ),
                   FlatButton

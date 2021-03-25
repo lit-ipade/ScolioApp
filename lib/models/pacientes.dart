@@ -6,12 +6,12 @@ class Paciente
   final String id;
   final String nome;
   final String sexo;
-  final DateTime nascimento;
+  final String nascimento;
   final List<Avaliacao> avaliacoesHistorico;
 
   Paciente
   ({
-    @required this.id,
+    this.id,
     @required this.nome,
     @required this.sexo,
     @required this.nascimento,

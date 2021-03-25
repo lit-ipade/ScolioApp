@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 class Avaliacao
 {
   final String id;
-  final DateTime data;
+  final String data;
   final bool desnivelOmbro;
   final bool desnivelBacia;
   final bool gibosidade;
