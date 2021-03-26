@@ -102,7 +102,7 @@ class AuthenticateWrapper extends StatelessWidget{
 
 class ListaPacientes extends StatefulWidget {
   final User user;
-
+  
   ListaPacientes(this.user);
   @override
   _ListaPacientesState createState() => _ListaPacientesState(user);
@@ -217,7 +217,7 @@ class _ListaConsultaState extends State<ListaConsulta> {
     final novoCadastro = Avaliacao
     (
       id: Random().nextDouble().toString(),
-      data: DateFormat('dd MM YYYY').format(DateTime.now()),
+      data: DateFormat('dd/MM/yyyy').format(DateTime.now()),
       desnivelOmbro: desnivelOmbro,
       desnivelBacia: desnivelBacia,
       gibosidade: gibosidade,
