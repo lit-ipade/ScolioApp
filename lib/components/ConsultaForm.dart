@@ -407,59 +407,63 @@ class _ConsultaFormState extends State<ConsultaForm> {
         (        
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>
-          [  
+          [
+          
             Padding
             (
-              padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-              child: Text('Radiografia panorâmica de coluna: '),
+              padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+              child: Text('Radiografia panorâmica de coluna: ',textAlign: TextAlign.center, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             ),
-            Row
-            (
-             children: <Widget>
-              [
-                Expanded
-                (
-                  child: ListTile
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              child: Row
+              (
+               children: <Widget>
+                [
+                  Expanded
                   (
-                    title: const Text('Sim'),
-                    leading: Radio
+                    child: ListTile
                     (
-                      value: true,
-                      groupValue: radiografia,
-                      onChanged: (t) 
-                      {
-                        setState
-                        (() 
-                          {
-                            radiografia = true;
-                          }
-                        );
-                      },
+                      title: const Text('Sim'),
+                      leading: Radio
+                      (
+                        value: true,
+                        groupValue: radiografia,
+                        onChanged: (t) 
+                        {
+                          setState
+                          (() 
+                            {
+                              radiografia = true;
+                            }
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-                Expanded
-                (
-                  child: ListTile
+                  Expanded
                   (
-                    title: const Text('Não'),
-                    leading: Radio
+                    child: ListTile
                     (
-                      value: false,
-                      groupValue: radiografia,
-                      onChanged: (t) 
-                      {
-                        setState
-                        (() 
-                          {
-                            radiografia = false;
-                          }
-                        );
-                      },
+                      title: const Text('Não'),
+                      leading: Radio
+                      (
+                        value: false,
+                        groupValue: radiografia,
+                        onChanged: (t) 
+                        {
+                          setState
+                          (() 
+                            {
+                              radiografia = false;
+                            }
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-              ], 
+                ], 
+              ),
             ),
           ], 
         ),
@@ -507,39 +511,41 @@ class _ConsultaFormState extends State<ConsultaForm> {
               Padding
                 (
                   padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                  child: Text('Radiografia panorâmica de coluna: '),
+                  child: Text('Radiografia panorâmica de coluna: ',textAlign: TextAlign.center, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                 ),
             ),
-            Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.3),
-                child: InkWell
-                (
-                  onTap: () => _submitForm(telaSelecionada),
-                  splashColor: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(5),
-                  child: Container
+            Center(
+              child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.3),
+                  child: InkWell
                   (
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    padding: EdgeInsets.all(15),
-                    child: Text
+                    onTap: () => _submitForm(telaSelecionada),
+                    splashColor: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(5),
+                    child: Container
                     (
-                      'Solicitar Radiografia',
-                      textAlign: TextAlign.center,
-                      style: TextStyle
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      padding: EdgeInsets.all(15),
+                      child: Text
                       (
-                        fontSize: 20,
-                        color: Colors.white,
+                        'Solicitar Radiografia',
+                        textAlign: TextAlign.center,
+                        style: TextStyle
+                        (
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    decoration: BoxDecoration
-                    (
-                      borderRadius: BorderRadius.circular(5),
-                      color: Theme.of(context).primaryColor,
+                      decoration: BoxDecoration
+                      (
+                        borderRadius: BorderRadius.circular(5),
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                   ),
                 ),
-              ),
+            ),
           ],
         ),
       ),
@@ -956,16 +962,16 @@ class _ConsultaFormState extends State<ConsultaForm> {
               padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
               child: Padding
               (
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: Text('Indicar o uso de órtese (colete)'),
+                padding: const EdgeInsets.all(8),
+                child: Center(child: Text('Indicar o uso de órtese (colete)', textAlign: TextAlign.center, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),)),
               ),
             ),
             Container(
               padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
               child: Padding
               (
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: Text('Encaminhar ao especialista para escolha do tipo de órtese e acompanhamento do uso.'),
+                padding: EdgeInsets.all(8),
+                child: Center(child: Text('Encaminhar ao especialista para escolha do tipo de órtese e acompanhamento do uso.', textAlign: TextAlign.center, style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600),)),
               ),
             ),
           ],
@@ -1011,16 +1017,16 @@ class _ConsultaFormState extends State<ConsultaForm> {
               padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
               child: Padding
               (
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: Text('Seguimento ambulatorial com Rx periódico'),
+                padding: const EdgeInsets.all(8),
+                child: Center(child:Text('Seguimento ambulatorial com Rx periódico', textAlign: TextAlign.center, style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),)),
               ),
             ),
             Container(
               padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
               child: Padding
               (
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: Text('Orientar para realização de atividades físicas e fisioterapia.'),
+                padding: const EdgeInsets.all(8),
+                child: Center(child: Text('Orientar para realização de atividades físicas e fisioterapia.', textAlign: TextAlign.center, style: TextStyle(fontSize: 18),)),
               ),
             ),
           ],
@@ -1059,10 +1065,13 @@ class _ConsultaFormState extends State<ConsultaForm> {
       (
         child: Column
         (
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>
           [  
-            Center(child: Text('Encaminhar para especialista para avaliar a possibilidade de tratamento cirúrgico')),
+            Padding(
+              padding:  EdgeInsets.fromLTRB(8,MediaQuery.of(context).size.height * 0.35,8,0),
+              child: Text('Encaminhar para especialista para avaliar a possibilidade de tratamento cirúrgico', textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600), ),
+            ),
           ],
         ),
       ),
@@ -1107,7 +1116,10 @@ class _ConsultaFormState extends State<ConsultaForm> {
               child: Padding
               (
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: Text('Seguimento ambulatorial com Rx periódico'),
+                child: Center(child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Seguimento ambulatorial com Rx periódico', textAlign: TextAlign.center, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+                )),
               ),
             ),
             Container(
@@ -1115,7 +1127,10 @@ class _ConsultaFormState extends State<ConsultaForm> {
               child: Padding
               (
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: Text('Orientar para realização de atividades físicas e fisioterapia.'),
+                child: Center(child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Orientar para realização de atividades físicas e fisioterapia.', textAlign: TextAlign.center, style: TextStyle(fontSize: 18),),
+                )),
               ),
             ),
           ],

@@ -82,7 +82,7 @@ class ResultadoConsulta extends StatelessWidget {
       return AlertDialog
       (
         title: Text('Dados da Consulta',style: TextStyle(color: Colors.red),),
-        content: Text('Desnivelamento de ombro: ' + _desnivelOmbro(consulta) + '\n' + '\n' + 'Desnivelamento de bacia: ' + _desnivelBacia(consulta) + '\n' + '\n' + 'Gibosidade: ' + _gibosidade(consulta) + '\n' +'\n' + 'Radiografia: ' + _radiografia(consulta) + '\n' + '\n'+ 'Ângulo de Cobb: ' + _anguloCobb(consulta) + '\n' + '\n'+ 'Maturidade Esquelética: '+ _maturidadeEsqueletica(consulta) + '\n'+ '\n',textAlign: TextAlign.justify,),
+        content: SingleChildScrollView(child: Text('Desnivelamento de ombro: ' + _desnivelOmbro(consulta) + '\n' + '\n' + 'Desnivelamento de bacia: ' + _desnivelBacia(consulta) + '\n' + '\n' + 'Gibosidade: ' + _gibosidade(consulta) + '\n' +'\n' + 'Radiografia: ' + _radiografia(consulta) + '\n' + '\n'+ 'Ângulo de Cobb: ' + _anguloCobb(consulta) + '\n' + '\n'+ 'Maturidade Esquelética: '+ _maturidadeEsqueletica(consulta) + '\n'+ '\n',textAlign: TextAlign.justify, style: TextStyle(fontSize:16),)),
         actions: <Widget>
         [
           FlatButton

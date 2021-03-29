@@ -31,10 +31,7 @@ class PacienteView extends StatelessWidget {
                     (
                       child:
                       (
-                        Text
-                        (
-                          infoPaciente.sexo
-                        )
+                        Icon(Icons.person)
                       ),
                     ),
                   ),

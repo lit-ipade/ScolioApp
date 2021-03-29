@@ -75,28 +75,21 @@ class _ConsultaListState extends State<ConsultaList> {
               (
                 leading: CircleAvatar
                 (
-                  radius: 30,
+                  radius: 25,
                   child: Padding
                   (
                     padding: const EdgeInsets.all(5.0),
                     child: FittedBox
                     (
                       child:
-                      Text
-                        (
-                         tr.data,
-                        ),
+                      Icon(Icons.receipt),
                     ),
                   ),
                 ),
                 title: Text
                 (
-                  'nada',//tr.nome,
+                  'Consulta do dia: ${tr.data}',
                   style: Theme.of(context).textTheme.headline6,
-                ),
-                subtitle: Text
-                (
-                  tr.data,
                 ),
                 trailing: IconButton
                 (
