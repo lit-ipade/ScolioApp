@@ -171,7 +171,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
             Padding
             (
               padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-              child: Text('Desnivelamento de ombro: ', textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+              child: Text('Desnivelamento de ombro: '),
             ),
             Row
             (
@@ -224,7 +224,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
             Padding
             (
               padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-              child: Text('Desnivelamento de bacia: ', textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+              child: Text('Desnivelamento de bacia: '),
             ),
             Row
             (
@@ -277,7 +277,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
             Padding
             (
               padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-              child: Text('Gibosidade: ', textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+              child: Text('Gibosidade: '),
             ),
             Row
             (
@@ -326,11 +326,6 @@ class _ConsultaFormState extends State<ConsultaForm> {
                   ),
                 ),
               ], 
-            ),
-            Container
-            (
-              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-              child: Image.asset('assets/Scolioapp.png'),
             ),
           ],
         ),
@@ -543,7 +538,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
               Padding
                 (
                   padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                  child: Text('Ângulo de Cobb: ', textAlign: TextAlign.center, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
+                  child: Text('Ângulo de Cobb: '),
                 ),
             ),
             Container
@@ -598,7 +593,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
               Padding
                 (
                   padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                  child: Text('Ângulo de Cobb: ', textAlign: TextAlign.center, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
+                  child: Text('Ângulo de Cobb: '),
                 ),
             ),
             Container
@@ -659,7 +654,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
                   padding: EdgeInsets.all(15),
                   child: Text
                   (
-                    '26° a 40°',
+                    '25° a 40°',
                     textAlign: TextAlign.center,
                     style: TextStyle
                     (
@@ -737,12 +732,12 @@ class _ConsultaFormState extends State<ConsultaForm> {
             Padding
             (
               padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-              child: Text('Maturidade Esquelética: ', textAlign: TextAlign.center, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
+              child: Text('Maturidade Esquelética: '),
             ),
             Container
             (
               alignment: Alignment.center,
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05),
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
               child: InkWell
               (
                 onTap: (){           
@@ -779,7 +774,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
             Container
             (
               alignment: Alignment.center,
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05),
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
               child: InkWell
               (
                 onTap: (){           
@@ -813,11 +808,6 @@ class _ConsultaFormState extends State<ConsultaForm> {
                 ),
               ),
             ),
-            Container
-            (
-              padding: EdgeInsets.fromLTRB(8, 20, 8, 0),
-              child: Image.asset('assets/Risser.png'),
-            ),
           ], 
         ),
       ),
@@ -825,6 +815,11 @@ class _ConsultaFormState extends State<ConsultaForm> {
       (
         children: <Widget>
         [
+          Align
+            (
+              alignment: Alignment.bottomRight,
+              child: botoes[0],
+            ),
           Padding
           (
             padding: EdgeInsets.fromLTRB(31,0,0,0),
@@ -865,7 +860,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
               child: Padding
               (
                 padding: EdgeInsets.all(8),
-                child: Center(child: Text('Encaminhar ao especialista para escolha do tipo de órtese e acompanhamento do uso.', textAlign: TextAlign.center, style: TextStyle(fontSize: 20),)),
+                child: Center(child: Text('Encaminhar ao especialista para escolha do tipo de órtese e acompanhamento do uso.', textAlign: TextAlign.center, style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600),)),
               ),
             ),
           ],
@@ -912,7 +907,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
               child: Padding
               (
                 padding: const EdgeInsets.all(8),
-                child: Center(child:Text('Seguimento ambulatorial com Rx periódico semestral', textAlign: TextAlign.center, style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),)),
+                child: Center(child:Text('Seguimento ambulatorial com Rx periódico', textAlign: TextAlign.center, style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),)),
               ),
             ),
             Container(
@@ -1012,7 +1007,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: Center(child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('Seguimento ambulatorial com Rx periódico semestral', textAlign: TextAlign.center, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+                  child: Text('Seguimento ambulatorial com Rx periódico', textAlign: TextAlign.center, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
                 )),
               ),
             ),
