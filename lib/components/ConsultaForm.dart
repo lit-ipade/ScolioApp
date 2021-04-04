@@ -36,7 +36,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
   @override
   Widget build(BuildContext context) 
   {
-  
+  final tamanhoTela = MediaQuery.of(context).size.width;
   final botoes =
   [
     FloatingActionButton
@@ -46,26 +46,26 @@ class _ConsultaFormState extends State<ConsultaForm> {
       {
         setState(() 
         {
-          if(telaSelecionada == 1)
+          if(telaSelecionada == 0)
           {
             if(desnivelBacia || desnivelOmbro || gibosidade)
             {
-              telaSelecionada++;
+              telaSelecionada = 1;
             }
             else
             {
               return;
             }
           }
-          else if(telaSelecionada == 2)
+          else if(telaSelecionada == 1)
             {
               if(radiografia)
               {
-                telaSelecionada = 4;
+                telaSelecionada = 3;
               }
               else
               {
-                telaSelecionada++;
+                telaSelecionada = 2;
               }
             }
           else
@@ -105,48 +105,49 @@ class _ConsultaFormState extends State<ConsultaForm> {
       child: Icon(Icons.keyboard_arrow_left),
       onPressed: ()
       {
-        if(telaSelecionada == 4)
+        if(telaSelecionada == 3)
         {
         setState(() 
           {
-            telaSelecionada = 2;
+            telaSelecionada = 1;
           });
         }
         
-        else if(telaSelecionada == 6)
+        else if(telaSelecionada == 5)
         {
           setState(() 
           {
             telaSelecionada = 4;
           }); 
         }
-        else if(telaSelecionada == 7)
+        else if(telaSelecionada == 6)
         { 
           setState(() 
             {
               maturidade = 0;
-              telaSelecionada--;
+              telaSelecionada = 5;
             });
+        }
+        else if(telaSelecionada == 7)
+        {
+          setState(() 
+          {
+            maturidade = 0;
+            telaSelecionada = 5;
+          });
+        }
+        else if(telaSelecionada == 8)
+        {
+          setState(() 
+          {
+            telaSelecionada = 4;
+          });
         }
         else if(telaSelecionada == 9)
         {
           setState(() 
           {
-            telaSelecionada = 6;
-          });
-        }
-        else if(telaSelecionada == 10)
-        {
-          setState(() 
-          {
-            telaSelecionada = 6;
-          });
-        }
-        else if(telaSelecionada == 11)
-        {
-          setState(() 
-          {
-            telaSelecionada = 7;
+            telaSelecionada = 4;
           });
         }
         else
@@ -170,32 +171,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
 
   final telas = 
   [
-    // -------------------------------------------------------------- Tela 0 ------------------------------------------------------------    
-    Scaffold
-    (
-      appBar: AppBar
-      (
-        title: Text('Cadastro de Consulta'),
-      ),
-      body: 
-      SingleChildScrollView
-      (
-        child: Column
-        (
-          children: <Widget>
-          [  
-            Container
-            (
-              height: MediaQuery.of(context).size.height * 0.9,
-              child: Image.asset('assets/Scolioapp.png'),
-            ),
-          ], 
-        ),
-      ),
-      floatingActionButton: botoes[0],
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-    ),
-    // -------------------------------------------------------------- Tela 1 ------------------------------------------------------------
+    // -------------------------------------------------------------- Tela 0 ------------------------------------------------------------
     Scaffold
     (
       appBar: AppBar
@@ -377,28 +353,10 @@ class _ConsultaFormState extends State<ConsultaForm> {
           ],
         ),
       ),
-      floatingActionButton: Stack
-      (
-        children: <Widget>
-        [
-          Align
-            (
-              alignment: Alignment.bottomRight,
-              child: botoes[0],
-            ),
-          Padding
-          (
-            padding: EdgeInsets.fromLTRB(31,0,0,0),
-            child: Align
-            (
-              alignment: Alignment.bottomLeft,
-              child: botoes[1],            
-            ),
-          ),
-        ]
-      ),
+      floatingActionButton: botoes[0],
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     ),
-    // -------------------------------------------------------------- Tela 2 ------------------------------------------------------------    
+    // -------------------------------------------------------------- Tela 1 ------------------------------------------------------------    
     Scaffold
     (
       appBar: AppBar
@@ -470,6 +428,12 @@ class _ConsultaFormState extends State<ConsultaForm> {
                 ], 
               ),
             ),
+            Container
+            (
+              height: tamanhoTela,
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: Image.asset('assets/Coluna.png'),
+            ),
           ], 
         ),
       ),
@@ -494,7 +458,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
         ]
       ),
     ),
-    //--------------------------------------------------------------------------------- Tela 3 ------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------- Tela 2 ------------------------------------------------------------------------
     Scaffold
     (
       appBar: AppBar
@@ -557,7 +521,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
       floatingActionButton: botoes[1],
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     ),
-    //------------------------------------------------------------------------Tela 4 ------------------------------------------------------------
+    //------------------------------------------------------------------------Tela 3 ------------------------------------------------------------
     Scaffold
     (
       appBar: AppBar
@@ -585,108 +549,34 @@ class _ConsultaFormState extends State<ConsultaForm> {
             ),
             Container
             (
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
-              child: InkWell
-              (
-                onTap: (){           
-                            setState(() 
-                            {
-                              telaSelecionada = 5;
-                            });
-                          },
-                splashColor: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(5),
-                child: Container
-                (
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  padding: EdgeInsets.all(15),
-                  child: Text
-                  (
-                    'Informações',
-                    textAlign: TextAlign.center,
-                    style: TextStyle
-                    (
-                      fontSize: 20,
-                      color: Colors.white,
-                    ),
-                  ),
-                  decoration: BoxDecoration
-                  (
-                    borderRadius: BorderRadius.circular(5),
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-              ),
-            ),
-            Container
-            (
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
-              child: InkWell
-              (
-                onTap: (){           
-                            setState(() 
-                            {
-                              telaSelecionada = 6;
-                            });
-                          },
-                splashColor: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(5),
-                child: Container
-                (
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  padding: EdgeInsets.all(15),
-                  child: Text
-                  (
-                    'Ja sei medir o Ângulo',
-                    textAlign: TextAlign.center,
-                    style: TextStyle
-                    (
-                      fontSize: 20,
-                      color: Colors.white,
-                    ),
-                  ),
-                  decoration: BoxDecoration
-                  (
-                    borderRadius: BorderRadius.circular(5),
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-              ),
+              padding: EdgeInsets.fromLTRB(0,tamanhoTela * 0.4 ,0,0),
+              child: Image.asset('assets/AnguloCobb.png'),
             ),
           ],
         ),
       ),
-      floatingActionButton: botoes[1],
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-    ),
-    //--------------------------------------------------------------------------------- Tela 5 -----------------------------------------------------------//
-    Scaffold
-    (
-      appBar: AppBar
+      floatingActionButton: Stack
       (
-        title: Text('Cadastro de Consulta'),
-      ),
-      body: 
-      SingleChildScrollView
-      (
-        child: Column
-        (
-          children: <Widget>
-          [  
-            Container
+        children: <Widget>
+        [
+          Align
             (
-              height: MediaQuery.of(context).size.height * 0.9,
-              child: Image.asset('assets/AnguloCobb.png'),
+              alignment: Alignment.bottomRight,
+              child: botoes[0],
             ),
-          ], 
-        ),
+          Padding
+          (
+            padding: EdgeInsets.fromLTRB(31,0,0,0),
+            child: Align
+            (
+              alignment: Alignment.bottomLeft,
+              child: botoes[1],            
+            ),
+          ),
+        ]
       ),
-      floatingActionButton: botoes[1],
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     ),
-    //----------------------------------------------------------------------------- Tela 6 --------------------------------------------------------------------//
+    //----------------------------------------------------------------------------- Tela 4 --------------------------------------------------------------------//
     Scaffold
     (
       appBar: AppBar
@@ -759,7 +649,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
                           setState(() 
                           {
                               angulo = 2;
-                              telaSelecionada = 7;
+                              telaSelecionada = 5;
                             });
                           },
                 splashColor: Theme.of(context).primaryColor,
@@ -796,7 +686,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
                           setState(() 
                           {
                               angulo = 3;
-                              telaSelecionada = 10;
+                              telaSelecionada = 8;
                             });
                           },
                 splashColor: Theme.of(context).primaryColor,
@@ -824,13 +714,13 @@ class _ConsultaFormState extends State<ConsultaForm> {
               ),
             ),
           ],
-        ),
+        ),  
       ),
       floatingActionButton: botoes[1],
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     ),  
 
-  // --------------------------------------------------------------------------- Tela 7 --------------------------------------------------  
+  // --------------------------------------------------------------------------- Tela 5 --------------------------------------------------  
     Scaffold
     (
       appBar: AppBar
@@ -860,7 +750,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
                           maturidade = 1;
                             setState(() 
                             {
-                              telaSelecionada = 8;
+                              telaSelecionada = 6;
                             });
                           },
                 splashColor: Theme.of(context).primaryColor,
@@ -897,7 +787,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
                           maturidade = 2;
                           setState(() 
                           {
-                            telaSelecionada = 11;
+                            telaSelecionada = 7;
                           });
                           },
                 splashColor: Theme.of(context).primaryColor,
@@ -948,7 +838,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
         ]
       ),
     ),
-    //--------------------------------------------------------------------------Tela 8 ---------------------------------------------------------------------
+    //--------------------------------------------------------------------------Tela 6 ---------------------------------------------------------------------
     Scaffold
     (
       appBar: AppBar
@@ -1003,7 +893,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
         ]
       ),
     ),
-    //-----------------------------------------------------------------------Tela 9 -----------------------------------------------------------
+    //-----------------------------------------------------------------------Tela 7 -----------------------------------------------------------
     Scaffold
     (
       appBar: AppBar
@@ -1058,7 +948,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
         ]
       ),
     ),
-    //------------------------------------------------------------------------Tela 10------------------------------------------------------------------------
+    //------------------------------------------------------------------------Tela 8------------------------------------------------------------------------
     Scaffold
     (
       appBar: AppBar
@@ -1101,7 +991,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
         ]
       ),
     ),
-    //----------------------------------------------------------------------------- Tela 11 ------------------------------------------------------
+    //----------------------------------------------------------------------------- Tela 9 ------------------------------------------------------
     Scaffold
     (
       appBar: AppBar
