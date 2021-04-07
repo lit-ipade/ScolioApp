@@ -90,7 +90,8 @@ class AuthenticateWrapper extends StatelessWidget{
   @override
   Widget build(BuildContext context)
   {
-    final firebaseUser = context.watch<User>(); 
+    User firebaseUser = context.watch<User>(); 
+    
     if(firebaseUser != null)
     {
       return ListaPacientes(firebaseUser);
@@ -101,8 +102,9 @@ class AuthenticateWrapper extends StatelessWidget{
 }
 
 class ListaPacientes extends StatefulWidget {
-  final User user;
   
+  final User user;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance; 
   ListaPacientes(this.user);
   @override
   _ListaPacientesState createState() => _ListaPacientesState(user);
@@ -110,11 +112,15 @@ class ListaPacientes extends StatefulWidget {
 
 class _ListaPacientesState extends State<ListaPacientes> {
 
-  final User user;
-
+  User user;
+  
   _ListaPacientesState(this.user);
   @override
   Widget build(BuildContext context) {
+
+    print(user.uid.toString());
+
+    
     final pacientesProvider = Provider.of<PacienteProvider>(context);
     final List<Paciente> _pacientes = pacientesProvider.pacientes;
         

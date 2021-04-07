@@ -40,29 +40,28 @@ class TelaLogin extends StatelessWidget
       final result = context.read<AuthenticationService>().signIn(data);
 
       return result;
-     /* if (!users.containsKey(data.name)) {
-        return 'Username not exists';
-      }
-      if (users[data.name] != data.password) {
-        return 'Password does not match';
-      }
-      return null;*/
       
     });
   }
     
-    return FlutterLogin(
-      title: 'ScolioApp',
-      logo: null,
-      onLogin: _authUser,
-      onSignup: _authUser,
-      onSubmitAnimationCompleted: ()
-      {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => ListaPacientes(firebaseUser),
-        ));
-      },
-      onRecoverPassword: _recoverPassword,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0,10.0,0,0),
+      child: FlutterLogin(
+        title: 'ScolioApp',
+        logo: 'assets/scolio.png',
+        onLogin: _authUser,
+        onSignup: _authUser,
+        onSubmitAnimationCompleted: ()
+        {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => ListaPacientes(firebaseUser),
+          ));
+        },
+        onRecoverPassword: _recoverPassword,
+        theme: LoginTheme(
+          titleStyle: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+      ),
     );
   }
 }
