@@ -6,7 +6,7 @@ class ConsultaList extends StatefulWidget
 {
 
   List<Avaliacao> consultas;
-  final void Function(String) onDelete; 
+  final void Function(int) onDelete; 
   final void Function(Avaliacao) mostrarConsulta;
   
   

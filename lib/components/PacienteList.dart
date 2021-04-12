@@ -6,7 +6,7 @@ import 'PacienteItem.dart';
 class PacienteList extends StatefulWidget {
 
   final List<Paciente> pacientes;
-  final void Function(String) onDelete;
+  final void Function(int) onDelete;
 
   PacienteList(this.pacientes, this.onDelete);
 

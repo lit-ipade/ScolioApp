@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login/flutter_login.dart';
 import 'package:provider/provider.dart';
 import 'package:scolioapp/components/Login.dart';
 import 'package:scolioapp/models/Autenticador_service.dart';
@@ -30,7 +29,6 @@ class ScolioApp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    FirebaseFirestore firestore = FirebaseFirestore.instance; 
     
     return MultiProvider
     (providers: 
@@ -104,7 +102,7 @@ class AuthenticateWrapper extends StatelessWidget{
 class ListaPacientes extends StatefulWidget {
   
   final User user;
-  final FirebaseFirestore firestore = FirebaseFirestore.instance; 
+  
   ListaPacientes(this.user);
   @override
   _ListaPacientesState createState() => _ListaPacientesState(user);
@@ -113,13 +111,10 @@ class ListaPacientes extends StatefulWidget {
 class _ListaPacientesState extends State<ListaPacientes> {
 
   User user;
-  
+
   _ListaPacientesState(this.user);
   @override
   Widget build(BuildContext context) {
-
-    print(user.uid.toString());
-
     
     final pacientesProvider = Provider.of<PacienteProvider>(context);
     final List<Paciente> _pacientes = pacientesProvider.pacientes;
@@ -128,7 +123,6 @@ class _ListaPacientesState extends State<ListaPacientes> {
   {
     final novoCadastro = Paciente
     (
-      id: Random().nextDouble().toString(),
       nome: nome,
       sexo: sexo,
       nascimento: nascimento,
@@ -152,7 +146,7 @@ class _ListaPacientesState extends State<ListaPacientes> {
     );
   }
 
-  _deletePaciente(String id)
+  _deletePaciente(int id)
   {
     setState(() {
       _pacientes.removeWhere((tr) => tr.id == id);
@@ -222,8 +216,8 @@ class _ListaConsultaState extends State<ListaConsulta> {
   {
     final novoCadastro = Avaliacao
     (
-      id: Random().nextDouble().toString(),
       data: DateFormat('dd/MM/yyyy').format(DateTime.now()),
+      proprietarioId: paciente.id,
       desnivelOmbro: desnivelOmbro,
       desnivelBacia: desnivelBacia,
       gibosidade: gibosidade,
@@ -251,7 +245,7 @@ class _ListaConsultaState extends State<ListaConsulta> {
     );
   }
 
-  _deleteConsulta(String id)
+  _deleteConsulta(int id)
   {
     setState(() {
       paciente.avaliacoesHistorico.removeWhere((tr) => tr.id == id);

@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 class PacienteView extends StatelessWidget {
 
   final Paciente infoPaciente;
-  final void Function(BuildContext,Paciente) _selectTela;
-  final void Function(String) onDelete;
+  final void Function(BuildContext, Paciente) _selectTela;
+  final void Function(int) onDelete;
 
   PacienteView(this.infoPaciente,this._selectTela,this.onDelete);
   @override
