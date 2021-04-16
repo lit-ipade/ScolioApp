@@ -24,15 +24,28 @@ class Avaliacao
     this.maturidadeEsqueletica,
   });
 
+  bool _intToBool (int variavel)
+    {
+      bool resultado = (variavel == 1) ?true :  false;
+      return resultado;
+    }
+
+  int _boolToint(bool variavel)
+   {
+     int resultado = (variavel)? 1 : 0;
+     return resultado;
+   }
+  
   Map<String, dynamic> toMap(){
+
    var map = <String, dynamic>{
     'id':id,
     'data':data,
-    'desnivelOmbro':desnivelOmbro,
     'proprietarioId':proprietarioId,
-    'desnivelBacia':desnivelBacia,
-    'gibosidade':gibosidade,
-    'radiografia':radiografia,
+    'desnivelOmbro':_boolToint(desnivelOmbro),
+    'desnivelBacia':_boolToint(desnivelBacia),
+    'gibosidade':_boolToint(gibosidade),
+    'radiografia':_boolToint(radiografia),
     'anguloCobb':anguloCobb,
     'maturidadeEsqueletica':maturidadeEsqueletica,
    };
@@ -41,13 +54,14 @@ class Avaliacao
 
   Avaliacao.fromMap(Map<String,dynamic> map)
   {
+
     this.id = map['id'];
     this.data = map['data'];
     this.proprietarioId = map['proprietarioId'];
-    this.desnivelOmbro = map['desnivelOmbro'];
-    this.desnivelBacia = map['desnivelBacia'];
-    this.gibosidade = map['gibosidade'];
-    this.radiografia = map['radiografia'];
+    this.desnivelOmbro = _intToBool(map['desnivelOmbro']);
+    this.desnivelBacia = _intToBool(map['desnivelBacia']);
+    this.gibosidade = _intToBool(map['gibosidade']);
+    this.radiografia = _intToBool(map['radiografia']);
     this.anguloCobb = map['anguloCobb'];
     this.maturidadeEsqueletica = map['maturidadeEsqueletica'];
   }

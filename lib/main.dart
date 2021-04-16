@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scolioapp/components/Login.dart';
+import 'package:scolioapp/database/databaseHelper.dart';
 import 'package:scolioapp/models/Autenticador_service.dart';
 import 'package:scolioapp/models/avaliacao.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -113,22 +114,48 @@ class _ListaPacientesState extends State<ListaPacientes> {
   User user;
 
   _ListaPacientesState(this.user);
+
+  DatabaseHelper db = DatabaseHelper();
+  List<Paciente> _pacientes = [];
+
+  @override
+  void initState(){
+
+    super.initState();
+
+    db.getAllPaciente(user.uid).then((lista)
+      {
+        setState(() {
+          _pacientes = lista;
+        });
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     
+    print(user.uid + " asuhdoiuahsdpoashdpoaushd");
     final pacientesProvider = Provider.of<PacienteProvider>(context);
-    final List<Paciente> _pacientes = pacientesProvider.pacientes;
-        
+    print(db.getCountPaciente());
   _addPaciente(String nome, String sexo, String nascimento)
   {
     final novoCadastro = Paciente
     (
+      uid: user.uid,
       nome: nome,
       sexo: sexo,
       nascimento: nascimento,
-      avaliacoesHistorico: [],
     );
     setState(() {
+      db.insertPaciente(novoCadastro);
+      db.getAllPaciente(user.uid).then((lista)
+      {
+        setState(() {
+          _pacientes = lista;
+        });
+      }
+    );
       pacientesProvider.addPaciente(novoCadastro);
     });
     Navigator.of(context).pop();
@@ -149,7 +176,14 @@ class _ListaPacientesState extends State<ListaPacientes> {
   _deletePaciente(int id)
   {
     setState(() {
+      db.deletarPaciente(id);
       _pacientes.removeWhere((tr) => tr.id == id);
+      db.getAllPaciente(user.uid).then((lista)
+      {
+        setState(() {
+          _pacientes = lista;
+        });
+      });
     });
   }
 
@@ -197,6 +231,10 @@ class _ListaPacientesState extends State<ListaPacientes> {
   }
 }
 
+
+
+
+//--------------------------------------------------------------------------------------------------Lista de Pacientes ------------------------------------------
 class ListaConsulta extends StatefulWidget {
   final Paciente paciente;
   
@@ -211,12 +249,33 @@ class _ListaConsultaState extends State<ListaConsulta> {
 
   _ListaConsultaState(this.paciente);
 
+  DatabaseHelper db = DatabaseHelper();
+
+  List<Avaliacao> _consultas;
+
+  void _atualizarLista(){
+    db.getListAvaliacao(paciente.id).then((lista){
+      setState(() {
+        _consultas = lista;
+      });
+    });
+  }
+
+  void initSuper()
+  {
+    super.initState();
+    db.getListAvaliacao(paciente.id).then((lista){
+      setState(() {
+        _consultas = lista;
+      });
+    });
+  }
 
   _addConsulta(bool desnivelOmbro, bool desnivelBacia, bool gibosidade, bool radiografia, int angulo, int maturidade)
   {
     final novoCadastro = Avaliacao
     (
-      data: DateFormat('dd/MM/yyyy').format(DateTime.now()),
+      data: DateFormat('dd/MM/yyyy').format(DateTime.now()).toString(),
       proprietarioId: paciente.id,
       desnivelOmbro: desnivelOmbro,
       desnivelBacia: desnivelBacia,
@@ -226,7 +285,12 @@ class _ListaConsultaState extends State<ListaConsulta> {
       maturidadeEsqueletica: maturidade
     );
     setState(() {
-      paciente.avaliacoesHistorico.add(novoCadastro);
+      db.insertAvaliacao(novoCadastro);
+      db.getListAvaliacao(paciente.id).then((lista){
+        setState(() {
+          _consultas = lista;
+        });
+      });
     });
     Navigator.of(context).pop();
   }
@@ -248,7 +312,12 @@ class _ListaConsultaState extends State<ListaConsulta> {
   _deleteConsulta(int id)
   {
     setState(() {
-      paciente.avaliacoesHistorico.removeWhere((tr) => tr.id == id);
+      db.deletarConsulta(id);
+      db.getListAvaliacao(paciente.id).then((lista){
+      setState(() {
+        _consultas = lista;
+      });
+    });
     });
   }
 
@@ -268,6 +337,7 @@ class _ListaConsultaState extends State<ListaConsulta> {
 
   @override
   Widget build(BuildContext context) {
+    _atualizarLista();
     return Scaffold
     (
       appBar: AppBar
@@ -281,7 +351,7 @@ class _ListaConsultaState extends State<ListaConsulta> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children:<Widget>
           [
-            ConsultaList(paciente.avaliacoesHistorico, _deleteConsulta, _exibirConsulta),
+            ConsultaList(paciente ,_consultas, _deleteConsulta, _exibirConsulta),
           ],
         ),
       ),

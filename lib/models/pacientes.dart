@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 class Paciente 
 {
   int id;
+  String uid;
   String nome;
   String sexo;
   String nascimento;
@@ -12,6 +13,7 @@ class Paciente
   Paciente
   ({
     this.id,
+    this.uid,
     @required this.nome,
     @required this.sexo,
     @required this.nascimento,
@@ -21,6 +23,7 @@ class Paciente
   Map<String,dynamic> toMap(){
     var map = <String, dynamic>{
       'id':id,
+      'uid':uid,
       'nome':nome,
       'sexo':sexo,
       'nascimento':nascimento,
@@ -30,6 +33,7 @@ class Paciente
 
   Paciente.fromMap(Map<String, dynamic> map){
     this.id = map['id'];
+    this.uid = map['uid'];
     this.nome = map['nome'];
     this.sexo = map['sexo'];
     this.nascimento = map['nascimento'];
@@ -37,6 +41,6 @@ class Paciente
 
   @override
   String toString(){
-    return "Paciente => (id: $id, nome: $nome, sexo: $sexo, nascimento: $nascimento)";
+    return "Paciente => (id: $id, uid:$uid,nome: $nome, sexo: $sexo, nascimento: $nascimento)";
   }
 }

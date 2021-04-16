@@ -25,18 +25,18 @@ class _ConsultaFormState extends State<ConsultaForm> {
   {
     if(telaSelecionada == 3)
     {
-      widget.onSubmit(desnivelOmbro ,desnivelBacia ,gibosidade ,radiografia = false ,angulo ,maturidade );
+      widget.onSubmit(desnivelOmbro ,desnivelBacia ,gibosidade ,radiografia = false ,angulo ,maturidade);
     }
     else
     {
       widget.onSubmit(desnivelOmbro,desnivelBacia,gibosidade,radiografia,angulo,maturidade);
     }
   }
-  
+  var telaSelecionada = 0;
   @override
   Widget build(BuildContext context) 
   {
-  var telaSelecionada = 0;
+  
   final botoes =
   [
     FloatingActionButton
@@ -86,6 +86,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
           {
             telaSelecionada = 1;
           });
+          print(telaSelecionada);
         }
         else if(telaSelecionada == 4)
         {
@@ -93,6 +94,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
           {
             telaSelecionada = 3;
           });
+          print(telaSelecionada);
         }
         
         else if(telaSelecionada == 5)
@@ -101,6 +103,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
           {
             telaSelecionada = 4;
           }); 
+          print(telaSelecionada);
         }
         else if(telaSelecionada == 6)
         { 
@@ -109,6 +112,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
               maturidade = 0;
               telaSelecionada = 5;
             });
+            print(telaSelecionada);
         }
         else if(telaSelecionada == 7)
         {
@@ -117,6 +121,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
             maturidade = 0;
             telaSelecionada = 5;
           });
+          print(telaSelecionada);
         }
         else if(telaSelecionada == 8)
         {
@@ -124,6 +129,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
           {
             telaSelecionada = 4;
           });
+          print(telaSelecionada);
         }
         else if(telaSelecionada == 9)
         {
@@ -131,13 +137,15 @@ class _ConsultaFormState extends State<ConsultaForm> {
           {
             telaSelecionada = 4;
           });
+          print(telaSelecionada);
         }
         else
         {
           setState(() 
-        {
-          telaSelecionada--;
-        });
+          {
+            telaSelecionada--;
+          });
+          print(telaSelecionada);
         }
       },
     ),
@@ -330,26 +338,29 @@ class _ConsultaFormState extends State<ConsultaForm> {
           ],
         ),
       ),
-      floatingActionButton: Stack
+      floatingActionButton: FloatingActionButton
       (
-        children: <Widget>
-        [
-          Align
-            (
-              alignment: Alignment.bottomRight,
-              child: botoes[0],
-            ),
-          Padding
-          (
-            padding: EdgeInsets.fromLTRB(31,0,0,0),
-            child: Align
-            (
-              alignment: Alignment.bottomLeft,
-              child: botoes[1],            
-            ),
-          ),
-        ]
-      ),
+        child: Icon(Icons.keyboard_arrow_right),
+        onPressed: ()
+        {
+          setState(() 
+          {
+            if(telaSelecionada == 0)
+            {
+              if(desnivelBacia || desnivelOmbro || gibosidade)
+              {
+                telaSelecionada = 1;
+              }
+              else
+              {
+                return;
+              }
+            }
+          });
+        },
+      ),  
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      
     ),
     // -------------------------------------------------------------- Tela 1 ------------------------------------------------------------    
     Scaffold
@@ -420,14 +431,14 @@ class _ConsultaFormState extends State<ConsultaForm> {
                       ),
                     ),
                   ),
-                  Container
-                  (
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    child: Image.asset('assets/Coluna.png'),
-                  ),
                 ], 
               ),
             ),
+            Container
+                  (
+                    padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    child: Image.asset('assets/Coluna.png',scale: 5.0,),
+                  ),
           ], 
         ),
       ),
@@ -538,12 +549,12 @@ class _ConsultaFormState extends State<ConsultaForm> {
               Padding
                 (
                   padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                  child: Text('Ângulo de Cobb: '),
+                  child: Text('Ângulo de Cobb: ',textAlign: TextAlign.center, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                 ),
             ),
             Container
             (
-              height: MediaQuery.of(context).size.height * 0.9,
+              height: MediaQuery.of(context).size.height * 0.6,
               child: Image.asset('assets/AnguloCobb.png'),
             ) 
           ],
@@ -593,7 +604,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
               Padding
                 (
                   padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                  child: Text('Ângulo de Cobb: '),
+                  child: Text('Ângulo de Cobb: ',textAlign: TextAlign.center, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                 ),
             ),
             Container
@@ -732,7 +743,7 @@ class _ConsultaFormState extends State<ConsultaForm> {
             Padding
             (
               padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-              child: Text('Maturidade Esquelética: '),
+              child: Text('Maturidade Esquelética: ',textAlign: TextAlign.center, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             ),
             Container
             (
@@ -1047,6 +1058,6 @@ class _ConsultaFormState extends State<ConsultaForm> {
       ),
     ),
   ];
-    return telas[0];
+    return telas[telaSelecionada];
   }
 } 

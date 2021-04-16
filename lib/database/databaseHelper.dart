@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:scolioapp/models/pacientes.dart';
 import 'package:scolioapp/models/avaliacao.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,6 +14,7 @@ class DatabaseHelper{
   //usado para definir as colunas Pacientes
   String pacienteTable = 'paciente';
   String colId = 'id';
+  String colUid = 'uid';
   String colNome = 'nome';
   String colSexo = 'sexo';
   String colNascimento = 'nascimento';
@@ -21,7 +23,7 @@ class DatabaseHelper{
   //usado para definir as colunas Avaliações
   String avaliacaoTable = 'avaliacoes';
   String colIdAvaliacoes = 'id';
-  String colProprietarioId = 'proprietarioID';
+  String colProprietarioId = 'proprietarioid';
   String colDataAvaliacoes = 'data';
   String colDesnivelOmbro = 'desnivelOmbro';
   String colDesnivelBacia = 'desnivelBacia';
@@ -32,7 +34,7 @@ class DatabaseHelper{
 
 
   DatabaseHelper._createInstance();
-
+  
   factory DatabaseHelper(){
     if(_databaseHelper == null)
     {
@@ -57,10 +59,10 @@ class DatabaseHelper{
         return db;
   }
 
-    FutureOr<void> _createDb(Database db, int version) async{
+  Future<void> _createDb(Database db, int version) async{
     await db.execute('PRAGMA foreign_keys = ON');
-    await db.execute("CREATE TABLE $pacienteTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colNome TEXT, $colSexo TEXT,$colNascimento TEXT)");
-    await db.execute("CREATE TABLE $avaliacaoTable($colIdAvaliacoes INTEGER PRIMARY KEY AUTOINCREMENT, $colProprietarioId INTEGER NOT NULL, FOREIGN KEY ($colProprietarioId) REFERENCES $pacienteTable ($colId) , $colDataAvaliacoes TEXT, $colDesnivelOmbro BOOLEAN, $colDesnivelBacia BOOLEAN, $colGibosidade BOOLEAN, $colRadiografia BOOLEAN, $colAnguloCobb INTEGER, $colMaturidade INTEGER))");
+    await db.execute("CREATE TABLE $pacienteTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colUid TEXT, $colNome TEXT, $colSexo TEXT, $colNascimento TEXT)");
+    await db.execute("CREATE TABLE $avaliacaoTable($colIdAvaliacoes INTEGER PRIMARY KEY AUTOINCREMENT, $colProprietarioId INTEGER, $colDataAvaliacoes TEXT, $colDesnivelOmbro INTEGER, $colDesnivelBacia INTEGER, $colGibosidade INTEGER, $colRadiografia INTEGER, $colAnguloCobb INTEGER, $colMaturidade INTEGER)");
   }
 
   //Incluir objeto paciente na tabela
@@ -80,30 +82,27 @@ class DatabaseHelper{
   return resultado;
   }
 
-  //Retorna todos os pacientes 
-  Future<List<Paciente>> getAllPaciente() async{
+  //Retorna todos os pacientes de um usuario
+  Future<List<Paciente>> getAllPaciente(String uid) async {
     Database db = await this.database;
+
     List<Paciente> listAll;
+    
+    List<Map> pacientes = await db.query(pacienteTable,
+    where: "$colUid = ?",
+    whereArgs: [uid],
+    );
 
-    List<Map> maps = await db.rawQuery("SELECT * from $pacienteTable", null);
-
-    if(maps.length > 0)
-    {
-      for(int i = 0; i<maps.length; i++)
-      {
-        listAll.add(Paciente.fromMap(maps[i]));
-      }
+    listAll = pacientes.isNotEmpty ? pacientes.map((e) => Paciente.fromMap(e)).toList() : [];
       return listAll;
-    }else{
-      return null;
     }
-  }
-
+  
+  
   //Retorna um paciente específico
   Future<Paciente> getPaciente(int idPaciente) async{
     Database db = await this.database;
     List<Map> maps = await db.query(pacienteTable,
-    columns: [colId, colNome, colSexo, colNascimento],
+    columns: [colId, colUid, colNome, colSexo, colNascimento],
     where: "$colId = ?",
     whereArgs: [idPaciente]
     );
@@ -123,23 +122,15 @@ class DatabaseHelper{
 
     List<Avaliacao> consultas;
     List<Map> maps = await db.query(avaliacaoTable,
-    columns: [colIdAvaliacoes, colProprietarioId, colDataAvaliacoes, colDesnivelBacia, colDesnivelOmbro, colGibosidade, colRadiografia, colAnguloCobb, colMaturidade],
     where: "$colProprietarioId = ?",
     whereArgs: [idPaciente]
     );
 
-    if(maps.length > 0)
-    {
-      for(int i = 0; i<maps.length; i++)
-      {
-        consultas.add(Avaliacao.fromMap(maps[i]));
-      }
+    consultas = maps.isNotEmpty ? maps.map((e) => Avaliacao.fromMap(e)).toList() : [];
       return consultas;
-    }else{
-      return null;
-    }
   }
 
+  //Atualizar um Paciente
   Future<int> updatePaciente(Paciente paciente) async{
     var db = await this.database;
 
@@ -148,7 +139,57 @@ class DatabaseHelper{
     where: '$colId = ?',
     whereArgs: [paciente.id], 
     );
+    return resultado;
+  }
+
+  //Excluir um paciente ById
+  Future<int> deletarPaciente(int id) async{
+    var db = await this.database;
+
+    await db.delete(avaliacaoTable, 
+    where: "$colProprietarioId = ?",
+    whereArgs: [id]
+    );
+  
+    int resultado = await db.delete(pacienteTable,
+    where: "$colId = ?",
+    whereArgs: [id]
+    );
 
     return resultado;
   }
+
+  //Exclui uma avaliação
+  Future<int> deletarConsulta(int id) async{
+    var db = await this.database;
+  
+    int resultado = await db.delete(avaliacaoTable,
+    where: "$colIdAvaliacoes = ?",
+    whereArgs: [id]
+    );
+
+    return resultado;
+  }
+
+  Future<String> getCountPaciente() async{
+    Database db = await this.database;
+    List<Map<String,dynamic>> x = await db.rawQuery('SELECT COUNT (*) FROM $pacienteTable');
+
+    var resultado  = Sqflite.firstIntValue(x).toString();
+    return resultado;
+  }
+
+  Future<int> getCountConsultas() async{
+    Database db = await this.database;
+    List<Map<String,dynamic>> x = await db.rawQuery('SELECT COUNT (*) FROM $avaliacaoTable');
+
+    int resultado  = Sqflite.firstIntValue(x);
+    return resultado;
+  }
+
+  Future close() async{
+    Database db = await this.database;
+    db.close();
+  }
+
 }

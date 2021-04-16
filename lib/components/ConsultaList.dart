@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scolioapp/models/pacientes.dart';
 import '../models/avaliacao.dart';
 import 'package:intl/intl.dart';
 
@@ -6,11 +7,12 @@ class ConsultaList extends StatefulWidget
 {
 
   List<Avaliacao> consultas;
+  Paciente paciente;
   final void Function(int) onDelete; 
   final void Function(Avaliacao) mostrarConsulta;
   
   
-  ConsultaList(this.consultas, this.onDelete, this.mostrarConsulta);
+  ConsultaList(this.paciente, this.consultas, this.onDelete, this.mostrarConsulta);
 
   @override
   _ConsultaListState createState() => _ConsultaListState();
