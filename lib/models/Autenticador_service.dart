@@ -21,16 +21,32 @@ class AuthenticationService
       return null;
     } on FirebaseAuthException catch (e)
       {
+        switch(e.code){
+          case "wrong-password" :
+          return "Senha inválida";
+          case "too-many-requests" :
+          return "Muitas tentativas detectadas desse dispositivo, por favor tente em alguns momentos.";
+        }
         return e.message;
+
       }
     
   }
-  Future<String> signUp({String email, String password}) async
+  Future<String> signUp(LoginData data) async
   {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      await _firebaseAuth.createUserWithEmailAndPassword(email: data.name, password: data.password);
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
   }
+  Future<String> recuperarSenha(String email) async
+  {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
+  }
+
 }

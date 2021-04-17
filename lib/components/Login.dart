@@ -19,28 +19,38 @@ class TelaLogin extends StatelessWidget
   
   
 
-  Future<String> _recoverPassword(String name) 
-  {
-    print('Name: $name');
-    return Future.delayed(loginTime).then((_) {
-      if (!users.containsKey(name)) {
-        return 'Username not exists';
-      }
-      return null;
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
+
     Future<String> _authUser(LoginData data){
+    print('Name: ${data.name}, Password: ${data.password}');
+    return Future.delayed(loginTime).then((_) {
+      final result = context.read<AuthenticationService>().signIn(data);
+      return result;
+      
+    });
+    }
+    
+    Future<String> onSignup(LoginData data){
     print('Name: ${data.name}, Password: ${data.password}');
     
     return Future.delayed(loginTime).then((_) {
-      final result = context.read<AuthenticationService>().signIn(data);
+      final result = context.read<AuthenticationService>().signUp(data);
 
       return result;
       
+    });
+  }
+
+  Future<String> _recoverPassword(String name) 
+  {
+    print('Name: $name');
+    return Future.delayed(loginTime).then((_) {
+      final result = context.read<AuthenticationService>().recuperarSenha(name);
+        return result;
     });
   }
     
@@ -50,7 +60,7 @@ class TelaLogin extends StatelessWidget
         title: 'ScolioApp',
         logo: 'assets/scolio.png',
         onLogin: _authUser,
-        onSignup: _authUser,
+        onSignup: onSignup,
         onSubmitAnimationCompleted: ()
         {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -60,6 +70,18 @@ class TelaLogin extends StatelessWidget
         onRecoverPassword: _recoverPassword,
         theme: LoginTheme(
           titleStyle: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+        messages: 
+          LoginMessages(
+            passwordHint: 'Senha',
+            signupButton:'Registrar',
+            forgotPasswordButton: 'Esqueceu a senha ?',
+            recoverPasswordButton: 'Recuperar',
+            recoverPasswordDescription: 'Cheque sua caixa de email e o lixo eletrônico',
+            goBackButton: 'Voltar',
+            recoverPasswordSuccess: 'Senha recuperada',
+            recoverPasswordIntro: 'Recupere sua senha',
+            confirmPasswordError: 'Senhas não coincidem',
           ),
       ),
     );
